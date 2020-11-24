@@ -2,10 +2,16 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
+import Homepage from './pages/Homepage';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 const App = () => {
   return (
     <>
-      <h1>Hello React</h1>
+      <BrowserRouter>
+        <Switch>
+          <Route path="/" exact component={Homepage} />
+        </Switch>
+      </BrowserRouter>
     </>
   );
 };
