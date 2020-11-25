@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { Button, Grid, Paper } from '@material-ui/core';
-import Options from './OptionsList';
+import Options from '../components/OptionsList';
 import AddIcon from '@material-ui/icons/Add';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import db from '../firebase';
