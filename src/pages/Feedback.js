@@ -28,6 +28,7 @@ const Feedback = () => {
   const [loading, setLoading] = useState(true);
   const [radioValue, setRadioValue] = useState('');
   const [suggestion, setSuggestion] = useState('');
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     db.collection('feedbacks')
@@ -61,8 +62,7 @@ const Feedback = () => {
           docRef.id
         );
       });
-    window.location.href = '/thanks';
-    // <Redirect exact to="/thanks" />;
+    setSubmitted(true);
   };
 
   const displayFeedbacks = feedbacks.map(
@@ -81,10 +81,10 @@ const Feedback = () => {
         <Grid item xs={12} style={{ marginBottom: '20px' }}>
           <h1>We are sad to see you go</h1>
         </Grid>
-        <Grid item xs={12} style={{ marginBottom: '20px' }}>
+        {/* <Grid item xs={12} style={{ marginBottom: '20px' }}>
           <h2>Why did you uninstall?</h2>
-        </Grid>
-        <Grid classname={classes.hidden} item xs={12}>
+        </Grid> */}
+        <Grid item xs={12}>
           <FormControl component="fieldset">
             <RadioGroup
               aria-label="Feedback"
@@ -94,12 +94,15 @@ const Feedback = () => {
             >
               {loading ? (
                 <CircularProgress size={50} />
+              ) : submitted ? (
+                <h3>Thank You for the Feedback.</h3>
               ) : (
                 <>
+                  <h2>Why did you uninstall?</h2>
                   {displayFeedbacks}
                   <TextField
                     name="suggestion"
-                    label="How can we improve?"
+                    label="How can we improve?(Optional)"
                     fullWidth
                     multiline
                     rows={5}

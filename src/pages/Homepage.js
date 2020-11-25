@@ -25,7 +25,7 @@ const Homepage = () => {
   return (
     <>
       <div className={classes.heading}>
-        <h1>Where do you want to go?</h1>
+        <h1>Which Page Do You Want To Explore?</h1>
       </div>
       <div className={classes.centeredBox}>
         <Box className={classes.root}>
