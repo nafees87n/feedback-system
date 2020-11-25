@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { Button, Grid, Paper } from '@material-ui/core';
-import Feedback from './Feedback';
+import Options from './OptionsList';
 import AddIcon from '@material-ui/icons/Add';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import db from '../firebase';
@@ -48,13 +48,18 @@ const Admin = () => {
   }
 
   const feed = all.length ? (
-    all.map(({ feedback, id }, i) => (
-      <Feedback feedback={feedback} key={i} id={id} />
+    all.map(({ feedback, id, counter }, i) => (
+      <Options
+        feedback={feedback}
+        key={i}
+        id={id}
+        count={counter}
+      />
     ))
   ) : (
-    <Grid item xs={7}>
-      <Paper style={{ padding: '10px' }} variant="outlined">
-        No Options Present
+    <Grid item xs={9}>
+      <Paper style={{ padding: '10px', width: '200px' }}>
+        No Feedback Option Set
       </Paper>
     </Grid>
   );

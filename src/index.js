@@ -4,6 +4,8 @@ import './index.css';
 import reportWebVitals from './reportWebVitals';
 import Homepage from './pages/Homepage';
 import Admin from './pages/Admin';
+import Feedback from './pages/Feedback';
+import Thanks from './pages/Thanks';
 import {
   BrowserRouter,
   Switch,
@@ -17,6 +19,12 @@ const App = () => {
         <Switch>
           <Route path="/" exact component={Homepage} />
           <Route path="/admin" exact component={Admin} />
+          <Route
+            path="/feedback"
+            exact
+            component={Feedback}
+          />
+          <Route path="/thanks" exact component={Thanks} />
         </Switch>
       </BrowserRouter>
     </>

@@ -1,47 +1,130 @@
-import React from 'react';
-import {
-  Button,
-  Grid,
-  Paper,
-  ButtonGroup,
-} from '@material-ui/core';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
+import React, { useState, useEffect } from 'react';
+import firebase from 'firebase';
+import { Grid, Button } from '@material-ui/core';
+import Radio from '@material-ui/core/Radio';
+import RadioGroup from '@material-ui/core/RadioGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormControl from '@material-ui/core/FormControl';
+import TextField from '@material-ui/core/TextField';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import { makeStyles } from '@material-ui/core/styles';
 import db from '../firebase';
 
-const Feedback = ({ feedback, id }) => {
-  function handleDelete() {
+const useStyles = makeStyles((theme) => ({
+  centeredBox: {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    textAlign: 'center',
+  },
+  textBox: {
+    marginBottom: '5px',
+  },
+}));
+const Feedback = () => {
+  const classes = useStyles();
+  const [feedbacks, setFeedbacks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [radioValue, setRadioValue] = useState('');
+  const [suggestion, setSuggestion] = useState('');
+
+  useEffect(() => {
     db.collection('feedbacks')
-      .doc(id)
-      .delete()
-      .then(() => console.log('deleted successfully'));
-  }
+      .get()
+      .then((snapshot) => {
+        setRadioValue(snapshot.docs[0].data().id);
+        setFeedbacks(
+          snapshot.docs.map((doc) => doc.data())
+        );
+        setLoading(false);
+      });
+  }, []);
+
+  const radioChange = (e) => {
+    setRadioValue(e.target.value);
+  };
+
+  const handleSubmit = (e) => {
+    db.collection('feedbacks')
+      .doc(radioValue)
+      .update({
+        counter: firebase.firestore.FieldValue.increment(1),
+      });
+    db.collection('suggestions')
+      .add({
+        suggestion: suggestion,
+      })
+      .then(function (docRef) {
+        console.log(
+          'Document written with ID: ',
+          docRef.id
+        );
+      });
+    window.location.href = '/thanks';
+    // <Redirect exact to="/thanks" />;
+  };
+
+  const displayFeedbacks = feedbacks.map(
+    ({ feedback, id }, i) => (
+      <FormControlLabel
+        value={id}
+        control={<Radio />}
+        label={feedback}
+        key={i}
+      />
+    )
+  );
   return (
     <>
-      <Grid item xs={8}>
-        <Paper
-          style={{ padding: '10px' }}
-          variant="outlined"
-        >
-          {feedback}
-        </Paper>
-      </Grid>
-      <Grid item xs={2}>
-        <ButtonGroup
-          variant="contained"
-          color="primary"
-          aria-label="contained primary button group"
-          size="small"
-        >
-          <Button>
-            <EditIcon />
-          </Button>
-          <Button onClick={handleDelete}>
-            <DeleteIcon />
-          </Button>
-        </ButtonGroup>
+      <Grid container className={classes.centeredBox}>
+        <Grid item xs={12} style={{ marginBottom: '20px' }}>
+          <h1>We are sad to see you go</h1>
+        </Grid>
+        <Grid item xs={12} style={{ marginBottom: '20px' }}>
+          <h2>Why did you uninstall?</h2>
+        </Grid>
+        <Grid classname={classes.hidden} item xs={12}>
+          <FormControl component="fieldset">
+            <RadioGroup
+              aria-label="Feedback"
+              name="Feedback"
+              value={radioValue}
+              onChange={radioChange}
+            >
+              {loading ? (
+                <CircularProgress size={50} />
+              ) : (
+                <>
+                  {displayFeedbacks}
+                  <TextField
+                    name="suggestion"
+                    label="How can we improve?"
+                    fullWidth
+                    multiline
+                    rows={5}
+                    variant="outlined"
+                    className={classes.textBox}
+                    onChange={(e) =>
+                      setSuggestion(e.target.value)
+                    }
+                  />
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                    onClick={handleSubmit}
+                  >
+                    Submit
+                  </Button>
+                </>
+              )}
+            </RadioGroup>
+          </FormControl>
+        </Grid>
       </Grid>
     </>
   );
 };
+
 export default Feedback;
