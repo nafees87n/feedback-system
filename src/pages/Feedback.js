@@ -7,8 +7,15 @@ import {
 } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import db from '../firebase';
 
-const Feedback = ({ feedback }) => {
+const Feedback = ({ feedback, id }) => {
+  function handleDelete() {
+    db.collection('feedbacks')
+      .doc(id)
+      .delete()
+      .then(() => console.log('deleted successfully'));
+  }
   return (
     <>
       <Grid item xs={8}>
@@ -29,7 +36,7 @@ const Feedback = ({ feedback }) => {
           <Button>
             <EditIcon />
           </Button>
-          <Button>
+          <Button onClick={handleDelete}>
             <DeleteIcon />
           </Button>
         </ButtonGroup>

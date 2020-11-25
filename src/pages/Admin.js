@@ -22,30 +22,42 @@ const Admin = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    db.collection('feedbacks')
-      .get()
-      .then((snapshot) => {
-        snapshot.forEach((doc) => {
-          setAll((prev) => [...prev, doc.data().feedback]);
-          setLoading(false);
-        });
-      });
+    db.collection('feedbacks').onSnapshot((snapshot) => {
+      if (!snapshot.exists) setLoading(false);
+      setAll(snapshot.docs.map((doc) => doc.data()));
+    });
   }, []);
 
-  function handleSubmit() {
+  function handleSubmit(e) {
+    e.preventDefault();
     const timestamp = new Date().getTime().toString();
     db.collection('feedbacks').doc(timestamp).set({
       feedback: feedback,
       counter: 0,
       id: timestamp,
     });
-    setAll((prev) => [...prev, feedback]);
+    // setAll((prev) => [
+    //   ...prev,
+    //   {
+    //     feedback: feedback,
+    //     counter: 0,
+    //     id: timestamp,
+    //   },
+    // ]);
     setFeedback('');
   }
 
-  const feed = all.map((feedback) => (
-    <Feedback feedback={feedback} />
-  ));
+  const feed = all.length ? (
+    all.map(({ feedback, id }, i) => (
+      <Feedback feedback={feedback} key={i} id={id} />
+    ))
+  ) : (
+    <Grid item xs={7}>
+      <Paper style={{ padding: '10px' }} variant="outlined">
+        No Options Present
+      </Paper>
+    </Grid>
+  );
   const progress = (
     <Grid item xs={5}>
       <CircularProgress size={100} />
@@ -53,48 +65,55 @@ const Admin = () => {
   );
   return (
     <>
-      <Grid
-        container
-        direction="row"
-        justify="center"
-        alignItems="flex-end"
-        className={classes.root}
+      <form
+        className={classes.form}
+        noValidate
+        autoComplete="off"
+        fullWidth
       >
         <Grid
-          style={{
-            background: '#3f50b5',
-            padding: '10px',
-            margin: '0',
-            color: 'white',
-          }}
-          component={Paper}
-          elevation={3}
-          item
-          xs={12}
+          container
+          direction="row"
+          justify="center"
+          alignItems="flex-end"
+          className={classes.root}
         >
-          <h1>Admin Dashboard</h1>
-        </Grid>
-        {loading ? progress : feed}
-        <Grid item xs={7}>
-          <TextField
-            id="standard-basic"
-            label="Add Feedback"
-            multiline
-            fullWidth
-            value={feedback}
-            onChange={(e) => setFeedback(e.target.value)}
-          />
-        </Grid>
-        <Grid item xs={2}>
-          <Button
-            variant="contained"
-            onClick={handleSubmit}
-            color="primary"
+          <Grid
+            style={{
+              background: '#3f50b5',
+              padding: '10px',
+              margin: '0',
+              color: 'white',
+            }}
+            component={Paper}
+            elevation={3}
+            item
+            xs={12}
           >
-            <AddIcon />
-          </Button>
+            <h1>Admin Dashboard</h1>
+          </Grid>
+          {loading ? progress : feed}
+          <Grid item xs={7}>
+            <TextField
+              id="standard-basic"
+              label="Add New Feedback Option"
+              fullWidth
+              value={feedback}
+              onChange={(e) => setFeedback(e.target.value)}
+            />
+          </Grid>
+          <Grid item xs={2}>
+            <Button
+              variant="contained"
+              onClick={handleSubmit}
+              color="primary"
+              type="submit"
+            >
+              <AddIcon />
+            </Button>
+          </Grid>
         </Grid>
-      </Grid>
+      </form>
     </>
   );
 };
