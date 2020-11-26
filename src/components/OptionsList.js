@@ -12,6 +12,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import Divider from '@material-ui/core/Divider';
 import db from '../firebase';
 
 const Options = ({ feedback, id, count }) => {
@@ -75,13 +76,21 @@ const Options = ({ feedback, id, count }) => {
           variant="outlined"
         >
           <Grid container alignItems="center">
-            <Grid item xs={9}>
+            <Grid item xs={8}>
               {feedback}
             </Grid>
+            <Divider
+              orientation="vertical"
+              flexItem
+              style={{
+                background: 'black',
+              }}
+            />
+
             <Grid
               item
               xs={3}
-              style={{ textAlign: 'right' }}
+              style={{ textAlign: 'right', align: 'right' }}
             >
               Selected By users: {count}
             </Grid>
