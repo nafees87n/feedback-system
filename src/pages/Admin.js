@@ -39,10 +39,10 @@ const Admin = () => {
   }
 
   const feed = all.length ? (
-    all.map(({ feedback, id, counter }, i) => (
+    all.map(({ feedback, id, counter }) => (
       <Options
         feedback={feedback}
-        key={i}
+        key={id}
         id={id}
         count={counter}
       />

@@ -59,12 +59,12 @@ const Feedback = () => {
   };
 
   const displayFeedbacks = feedbacks.map(
-    ({ feedback, id }, i) => (
+    ({ feedback, id }) => (
       <FormControlLabel
         value={id}
         control={<Radio />}
         label={feedback}
-        key={i}
+        key={id}
       />
     )
   );
@@ -77,7 +77,6 @@ const Feedback = () => {
         <Grid item xs={12}>
           <FormControl component="fieldset">
             <RadioGroup
-              aria-label="Feedback"
               name="Feedback"
               value={radioValue}
               onChange={radioChange}

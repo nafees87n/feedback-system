@@ -47,9 +47,7 @@ const Options = ({ feedback, id, count }) => {
         maxWidth="sm"
         fullWidth
       >
-        <DialogTitle id="form-dialog-title">
-          Modify The Option
-        </DialogTitle>
+        <DialogTitle>Modify The Option</DialogTitle>
         <DialogContent>
           <TextField
             autoFocus
@@ -101,7 +99,6 @@ const Options = ({ feedback, id, count }) => {
         <ButtonGroup
           variant="contained"
           color="primary"
-          aria-label="contained primary button group"
           size="small"
         >
           <Button onClick={handleClickOpen}>
