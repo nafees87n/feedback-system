@@ -7,17 +7,11 @@ const useStyles = makeStyles((theme) => ({
     '& > *': {
       margin: theme.spacing(2),
     },
-  },
-  centeredBox: {
-    position: 'fixed',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
+    margin: '10% 40%',
   },
   heading: {
     marginTop: '15px',
     textAlign: 'center',
-    fontSize: '2em',
   },
 }));
 const Homepage = () => {

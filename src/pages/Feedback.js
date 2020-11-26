@@ -52,16 +52,9 @@ const Feedback = () => {
       .update({
         counter: firebase.firestore.FieldValue.increment(1),
       });
-    db.collection('suggestions')
-      .add({
-        suggestion: suggestion,
-      })
-      .then(function (docRef) {
-        console.log(
-          'Document written with ID: ',
-          docRef.id
-        );
-      });
+    db.collection('suggestions').add({
+      suggestion: suggestion,
+    });
     setSubmitted(true);
   };
 
@@ -81,9 +74,6 @@ const Feedback = () => {
         <Grid item xs={12} style={{ marginBottom: '20px' }}>
           <h1>We are sad to see you go</h1>
         </Grid>
-        {/* <Grid item xs={12} style={{ marginBottom: '20px' }}>
-          <h2>Why did you uninstall?</h2>
-        </Grid> */}
         <Grid item xs={12}>
           <FormControl component="fieldset">
             <RadioGroup

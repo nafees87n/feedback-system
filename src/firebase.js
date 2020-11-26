@@ -9,7 +9,7 @@ var firebaseConfig = {
     process.env.REACT_APP_MESSAGING_SENDER_ID,
   appId: process.env.APPID,
 };
-// Initialize Firebase
+// Initialize Firestore
 
 const db = firebase
   .initializeApp(firebaseConfig)

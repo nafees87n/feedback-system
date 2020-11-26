@@ -11,7 +11,6 @@ const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {
       margin: theme.spacing(1),
-      width: '25ch',
     },
   },
 }));
@@ -36,14 +35,6 @@ const Admin = () => {
       counter: 0,
       id: timestamp,
     });
-    // setAll((prev) => [
-    //   ...prev,
-    //   {
-    //     feedback: feedback,
-    //     counter: 0,
-    //     id: timestamp,
-    //   },
-    // ]);
     setFeedback('');
   }
 
