@@ -52,9 +52,11 @@ const Feedback = () => {
       .update({
         counter: firebase.firestore.FieldValue.increment(1),
       });
-    db.collection('suggestions').add({
-      suggestion: suggestion,
-    });
+    if (suggestion) {
+      db.collection('suggestions').add({
+        suggestion: suggestion,
+      });
+    }
     setSubmitted(true);
   };
 

@@ -29,12 +29,14 @@ const Admin = () => {
 
   function handleSubmit(e) {
     e.preventDefault();
-    const timestamp = new Date().getTime().toString();
-    db.collection('feedbacks').doc(timestamp).set({
-      feedback: feedback,
-      counter: 0,
-      id: timestamp,
-    });
+    if (feedback) {
+      const timestamp = new Date().getTime().toString();
+      db.collection('feedbacks').doc(timestamp).set({
+        feedback: feedback,
+        counter: 0,
+        id: timestamp,
+      });
+    }
     setFeedback('');
   }
 
