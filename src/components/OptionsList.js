@@ -24,9 +24,11 @@ const Options = ({ feedback, id, count }) => {
   };
 
   const handleEdit = () => {
-    db.collection('feedbacks').doc(id).update({
-      feedback: modified,
-    });
+    if (modified) {
+      db.collection('feedbacks').doc(id).update({
+        feedback: modified,
+      });
+    }
     setOpen(false);
   };
 
