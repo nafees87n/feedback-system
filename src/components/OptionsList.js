@@ -25,7 +25,6 @@ const Options = ({ feedback, id, count }) => {
 
   const handleEdit = async () => {
     if (!modified) {
-      setOpen(false);
       alert('Option Cannot be Empty');
       return;
     }
@@ -35,17 +34,18 @@ const Options = ({ feedback, id, count }) => {
       .then((query) => {
         return query.docs.some(
           (doc) =>
-            doc.data().feedback.toLowerCase() === feedback.toLowerCase()
+            doc.data().feedback.toLowerCase() ===
+            modified.trim().toLowerCase()
         );
       });
     if (feedbackExists) {
       alert('Option Already Exists');
     } else {
       db.collection('feedbacks').doc(id).update({
-        feedback: modified,
+        feedback: modified.trim(),
       });
+      setOpen(false);
     }
-    setOpen(false);
   };
 
   const handleClickOpen = () => {

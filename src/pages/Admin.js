@@ -27,11 +27,10 @@ const Admin = () => {
     });
   }, []);
 
-  async function handleSubmit(e) {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!feedback) {
       alert('Option Cannot be Empty');
-      setFeedback('');
       return;
     }
     const feedbackExists = await db
@@ -40,28 +39,22 @@ const Admin = () => {
       .then((query) => {
         return query.docs.some(
           (doc) =>
-            doc.data().feedback.toLowerCase() === feedback.toLowerCase()
+            doc.data().feedback.toLowerCase() ===
+            feedback.trim().toLowerCase()
         );
       });
-    // return (
-    //   query.docs.length &&
-    //   query.docs[0].data().feedback.toLowerCase() ===
-    //     feedback.toLowerCase()
-    // );
-    // });
-    console.log(feedbackExists);
     if (feedbackExists) {
       alert('Option Already Exists');
     } else {
       const timestamp = new Date().getTime().toString();
       db.collection('feedbacks').doc(timestamp).set({
-        feedback: feedback,
+        feedback: feedback.trim(),
         counter: 0,
         id: timestamp,
       });
+      setFeedback('');
     }
-    setFeedback('');
-  }
+  };
 
   const feed = all.length ? (
     all.map(({ feedback, id, counter }) => (
