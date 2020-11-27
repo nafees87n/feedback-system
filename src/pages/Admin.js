@@ -27,9 +27,32 @@ const Admin = () => {
     });
   }, []);
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
-    if (feedback) {
+    if (!feedback) {
+      alert('Option Cannot be Empty');
+      setFeedback('');
+      return;
+    }
+    const feedbackExists = await db
+      .collection('feedbacks')
+      .get()
+      .then((query) => {
+        return query.docs.some(
+          (doc) =>
+            doc.data().feedback.toLowerCase() === feedback.toLowerCase()
+        );
+      });
+    // return (
+    //   query.docs.length &&
+    //   query.docs[0].data().feedback.toLowerCase() ===
+    //     feedback.toLowerCase()
+    // );
+    // });
+    console.log(feedbackExists);
+    if (feedbackExists) {
+      alert('Option Already Exists');
+    } else {
       const timestamp = new Date().getTime().toString();
       db.collection('feedbacks').doc(timestamp).set({
         feedback: feedback,
@@ -42,12 +65,7 @@ const Admin = () => {
 
   const feed = all.length ? (
     all.map(({ feedback, id, counter }) => (
-      <Options
-        feedback={feedback}
-        key={id}
-        id={id}
-        count={counter}
-      />
+      <Options feedback={feedback} key={id} id={id} count={counter} />
     ))
   ) : (
     <Grid item xs={9}>

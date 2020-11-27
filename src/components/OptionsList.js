@@ -23,8 +23,24 @@ const Options = ({ feedback, id, count }) => {
     db.collection('feedbacks').doc(id).delete();
   };
 
-  const handleEdit = () => {
-    if (modified) {
+  const handleEdit = async () => {
+    if (!modified) {
+      setOpen(false);
+      alert('Option Cannot be Empty');
+      return;
+    }
+    const feedbackExists = await db
+      .collection('feedbacks')
+      .get()
+      .then((query) => {
+        return query.docs.some(
+          (doc) =>
+            doc.data().feedback.toLowerCase() === feedback.toLowerCase()
+        );
+      });
+    if (feedbackExists) {
+      alert('Option Already Exists');
+    } else {
       db.collection('feedbacks').doc(id).update({
         feedback: modified,
       });
@@ -71,10 +87,7 @@ const Options = ({ feedback, id, count }) => {
       </Dialog>
 
       <Grid item xs={8}>
-        <Paper
-          style={{ padding: '10px' }}
-          variant="outlined"
-        >
+        <Paper style={{ padding: '10px' }} variant="outlined">
           <Grid container alignItems="center">
             <Grid item xs={8}>
               {feedback}
@@ -98,11 +111,7 @@ const Options = ({ feedback, id, count }) => {
         </Paper>
       </Grid>
       <Grid item xs={2}>
-        <ButtonGroup
-          variant="contained"
-          color="primary"
-          size="small"
-        >
+        <ButtonGroup variant="contained" color="primary" size="small">
           <Button onClick={handleClickOpen}>
             <EditIcon />
           </Button>
